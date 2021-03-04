@@ -18,8 +18,21 @@ def _set(argv, data):
     return data
 
 
+def _del(argv, data):
+    if not argv:
+        raise KeyError()
+
+    key = argv.pop(0)
+
+    if key in data:
+        del data[key]
+
+    return data
+
+
 func = {
     'set': _set,
+    'del': _del,
 }
 
 

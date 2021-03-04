@@ -36,7 +36,10 @@ def main():
     if opts['debug']:
         print(type(data), file=sys.stderr)
 
-    text = str() if data is None else str(data)
+    if opts['jsono'] or opts['json']:
+        text = str() if data is None else json.dumps(data)
+    else:
+        text = str() if data is None else json.dumps(data)
 
     if text:
         olines.write(text)
