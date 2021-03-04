@@ -1,8 +1,49 @@
 #!/usr/bin/python3
 
+from collections import defaultdict
+
+import json
 import sys
 import t
 
 
+def main():
+    opts = defaultdict(bool)
+
+    argv = []
+    for item in sys.argv[1:]:
+        extra, _, value = item.partition('--')
+
+        if not extra and value:
+            opts[value] = True
+        else:
+            argv.append(item)
+
+    ilines = sys.stdin
+    olines = sys.stdout
+
+    if opts['jsoni'] or opts['json']:
+        init = lambda: json.loads(ilines.read())
+    else:
+        init = lambda: json.loads(ilines.read())
+
+    if opts['debug']:
+        print(opts, file=sys.stderr)
+        print(argv, file=sys.stderr)
+
+    data = t.bone(opts, argv, init)
+
+    if opts['debug']:
+        print(type(data), file=sys.stderr)
+
+    text = str() if data is None else str(data)
+
+    if text:
+        olines.write(text)
+        olines.write('\n')
+
+    olines.flush()
+
+
 if __name__ == '__main__':
-    t.bone(sys)
+    main()
