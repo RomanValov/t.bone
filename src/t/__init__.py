@@ -88,6 +88,13 @@ def _only(*args, **kwargs):
     return func
 
 
+def _pass(*args, **kwargs):
+    def func(data):
+        return data
+
+    return func
+
+
 vtbl = {
     'set': _set,
     'del': _del,
@@ -95,6 +102,7 @@ vtbl = {
     'wrap': _wrap,
     'pick': _pick,
     'only': _only,
+    'pass': _pass,
 }
 
 
@@ -117,7 +125,7 @@ def bone(opts, argv, init):
         if not elem:
             continue
 
-        name = elem.pop(0)
+        name = elem.pop(0).lower()
 
         args, kwargs = [], {}
         for item in elem:
