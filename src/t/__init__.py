@@ -45,10 +45,26 @@ def _del(*args, **kwargs):
     return func
 
 
+def _wrap(*args, **kwargs):
+    if not args:
+        raise KeyError()
+
+    def func(data):
+        copy = {}
+
+        for key in args:
+            copy[key] = data
+
+        return copy
+
+    return func
+
+
 vtbl = {
     'set': _set,
     'del': _del,
     'get': _get,
+    'wrap': _wrap,
 }
 
 
