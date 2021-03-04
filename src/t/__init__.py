@@ -57,7 +57,12 @@ def hint(name):
 
 
 def bone(opts, argv, init):
-    pipe = ' '.join(argv).split('/')
+    if opts['colon']:
+        delim = ':'
+    else:
+        delim = '/'
+
+    pipe = ' '.join(argv).split(delim)
 
     data = None
     for part in pipe:
