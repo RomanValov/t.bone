@@ -1,6 +1,19 @@
 
 #print('t.bone: kosh kelinizder')
 
+def _get(*args, **kwargs):
+    if not args:
+        raise KeyError()
+
+    def func(data):
+        copy = {}
+        for key in args:
+            copy[key] = data[key]
+
+        return copy
+
+    return func
+
 
 def _set(*args, **kwargs):
     if args:
@@ -35,6 +48,7 @@ def _del(*args, **kwargs):
 vtbl = {
     'set': _set,
     'del': _del,
+    'get': _get,
 }
 
 
