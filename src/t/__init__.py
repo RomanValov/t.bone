@@ -45,7 +45,7 @@ def _del(*args, **kwargs):
     return func
 
 
-def _wrap(*args, **kwargs):
+def _put(*args, **kwargs):
     if not args:
         raise KeyError()
 
@@ -60,11 +60,28 @@ def _wrap(*args, **kwargs):
     return func
 
 
+def _cut(*args, **kwargs):
+    if not args:
+        raise KeyError()
+
+    def func(data):
+        copy = []
+
+        for key in args:
+            if key in data:
+                copy.append(data[key])
+
+        return copy
+
+    return func
+
+
 vtbl = {
     'set': _set,
     'del': _del,
     'get': _get,
-    'wrap': _wrap,
+    'put': _put,
+    'cut': _cut,
 }
 
 
