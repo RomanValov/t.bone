@@ -2,35 +2,37 @@
 #print('t.bone: kosh kelinizder')
 
 
-def _set(argv, data):
-    if not argv:
+def _set(*args, **kwargs):
+    if args:
         raise KeyError()
 
-    key = argv.pop(0)
-
-    if not argv:
+    if not kwargs:
         raise ValueError()
 
-    value = argv.pop(0)
+    def func(data):
+        for key in kwargs:
+            data[key] = kwargs[key]
 
-    data[key] = value
+        return data
 
-    return data
+    return func
 
 
-def _del(argv, data):
-    if not argv:
+def _del(*args, **kwargs):
+    if not args:
         raise KeyError()
 
-    key = argv.pop(0)
+    def func(data):
+        for key in args:
+            if key in data:
+                del data[key]
 
-    if key in data:
-        del data[key]
+        return data
 
-    return data
+    return func
 
 
-func = {
+vtbl = {
     'set': _set,
     'del': _del,
 }
@@ -52,10 +54,20 @@ def bone(opts, argv, init):
 
         name = elem.pop(0)
 
+        args, kwargs = [], {}
+        for item in elem:
+            key, delim, value = item.partition('=')
+            if delim:
+                kwargs[key] = value
+            else:
+                args.append(item)
+
         if data is None:
             data = init()
 
-        data = func.get(name, lambda *_: hint(name))(elem, data)
+        func = vtbl.get(name, lambda *_, **__: hint(name))(*args, **kwargs)
+
+        data = func(data)
 
         if data is None:
             break
