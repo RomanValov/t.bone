@@ -45,7 +45,7 @@ def _del(*args, **kwargs):
     return func
 
 
-def _put(*args, **kwargs):
+def _wrap(*args, **kwargs):
     if not args:
         raise KeyError()
 
@@ -60,7 +60,7 @@ def _put(*args, **kwargs):
     return func
 
 
-def _cut(*args, **kwargs):
+def _pick(*args, **kwargs):
     if not args:
         raise KeyError()
 
@@ -76,12 +76,25 @@ def _cut(*args, **kwargs):
     return func
 
 
+def _only(*args, **kwargs):
+    def func(data):
+        if not isinstance(data, list):
+            return data
+        elif data:
+            return data.pop(0)
+        else:
+            return {}
+
+    return func
+
+
 vtbl = {
     'set': _set,
     'del': _del,
     'get': _get,
-    'put': _put,
-    'cut': _cut,
+    'wrap': _wrap,
+    'pick': _pick,
+    'only': _only,
 }
 
 
