@@ -95,6 +95,18 @@ def _pass(*args, **kwargs):
     return func
 
 
+def _copy(*args, **kwargs):
+    if not args:
+        raise ValueError()
+
+    n = int(args[0])
+
+    def func(data):
+        return [data] * n
+
+    return func
+
+
 vtbl = {
     'set': _set,
     'del': _del,
@@ -103,6 +115,7 @@ vtbl = {
     'pick': _pick,
     'only': _only,
     'pass': _pass,
+    'copy': _copy,
 }
 
 
