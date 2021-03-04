@@ -22,7 +22,9 @@ def main():
     ilines = sys.stdin
     olines = sys.stdout
 
-    if opts['jsoni'] or opts['json']:
+    if opts['empty']:
+        init = lambda: {}
+    elif opts['jsoni'] or opts['json']:
         init = lambda: json.loads(ilines.read())
     else:
         init = lambda: json.loads(ilines.read())
